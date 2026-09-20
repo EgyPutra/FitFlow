@@ -63,7 +63,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ## Hosting
 
-Database SQLite adalah **satu file**, jadi butuh **persistent disk** — bukan filesystem ephemeral. Kalau tidak, data hilang tiap deploy.
+Database SQLite adalah **satu file**, jadi butuh **persistent disk** — bukan filesystem ephemeral. Kalau tidak, data hilang tiap deploy. Vercel Functions tidak menyediakan disk persisten untuk SQLite; deploy Vercel hanya cocok untuk demo sementara kecuali database diganti ke layanan terkelola.
 
 ### Railway / Render / Fly.io
 

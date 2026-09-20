@@ -2,7 +2,11 @@ import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
-const DB_PATH = process.env.DATABASE_PATH || resolve(process.cwd(), 'data/fitflow.db');
+// Vercel Functions have a read-only deployment filesystem. `/tmp` lets the
+// demo run there; use a managed database before relying on data persistence.
+const DB_PATH = process.env.DATABASE_PATH || (process.env.VERCEL
+  ? '/tmp/fitflow.db'
+  : resolve(process.cwd(), 'data/fitflow.db'));
 mkdirSync(dirname(DB_PATH), { recursive: true });
 
 export const db = new DatabaseSync(DB_PATH);

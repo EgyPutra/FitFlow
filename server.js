@@ -123,7 +123,7 @@ function matchRoute(method, pathname) {
   return null;
 }
 
-const server = createServer(async (req, res) => {
+export async function handler(req, res) {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const { pathname } = url;
 
@@ -162,8 +162,12 @@ const server = createServer(async (req, res) => {
     if (status >= 500) console.error(`[error] ${req.method} ${pathname}`, err);
     send(res, status, { error: status >= 500 ? 'Something broke on our end. Try again.' : err.message });
   }
-});
+}
 
-server.listen(PORT, () => {
-  console.log(`\n  FitFlow running → http://localhost:${PORT}\n`);
-});
+// Vercel invokes `handler` for each request. Locally we retain the standalone
+// HTTP server used by `npm start`.
+if (!process.env.VERCEL) {
+  createServer(handler).listen(PORT, () => {
+    console.log(`\n  FitFlow running → http://localhost:${PORT}\n`);
+  });
+}
