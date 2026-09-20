@@ -1,0 +1,20 @@
+{
+  "name": "fitflow",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-powered fitness tracker — workouts, food scanning, coaching",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node scripts/seed.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1"
+  }
+}

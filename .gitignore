@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+
+# Local SQLite database and its write-ahead-log files contain app data.
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# Local design captures, not application assets.
+Screenshot *.png
+Pasted *.png
