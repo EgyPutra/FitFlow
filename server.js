@@ -1,7 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
-import { routes } from './src/routes.js';
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = resolve(process.cwd(), 'public');
@@ -114,7 +113,7 @@ async function serveStatic(req, res, pathname) {
 
 /* ---------- router ---------- */
 
-function matchRoute(method, pathname) {
+function matchRoute(method, pathname, routes) {
   for (const route of routes) {
     if (route.method !== method) continue;
     const m = pathname.match(route.pattern);
@@ -145,12 +144,16 @@ export async function handler(req, res) {
     return serveStatic(req, res, pathname);
   }
 
+  // Keep static pages independent from the database. This lets the app shell
+  // load even if a serverless database connection has a separate problem.
+  const { routes } = await import('./src/routes.js');
+
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || 'unknown';
   if (rateLimited(ip)) {
     return send(res, 429, { error: 'Too many requests. Wait a minute and try again.' });
   }
 
-  const match = matchRoute(req.method, pathname);
+  const match = matchRoute(req.method, pathname, routes);
   if (!match) return send(res, 404, { error: `No route for ${req.method} ${pathname}` });
 
   try {
