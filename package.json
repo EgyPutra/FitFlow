@@ -6,8 +6,8 @@
   "description": "AI-powered fitness tracker — workouts, food scanning, coaching",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
+    "start": "node start.js",
+    "dev": "node --watch start.js",
     "seed": "node scripts/seed.js"
   },
   "engines": {

@@ -1,8 +1,6 @@
-import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
 
-const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = resolve(process.cwd(), 'public');
 const MAX_BODY = 12 * 1024 * 1024; // 12 MB — room for a camera frame
 
@@ -167,10 +165,5 @@ export async function handler(req, res) {
   }
 }
 
-// Vercel invokes `handler` for each request. Locally we retain the standalone
-// HTTP server used by `npm start`.
-if (!process.env.VERCEL) {
-  createServer(handler).listen(PORT, () => {
-    console.log(`\n  FitFlow running → http://localhost:${PORT}\n`);
-  });
-}
+// Vercel detects `server.js` as the entrypoint and requires a default export.
+export default handler;

@@ -4,7 +4,10 @@ import { dirname, resolve } from 'node:path';
 
 // Vercel Functions have a read-only deployment filesystem. `/tmp` lets the
 // demo run there; use a managed database before relying on data persistence.
-const DB_PATH = process.env.DATABASE_PATH || (process.env.VERCEL
+const isServerless = Boolean(
+  process.env.VERCEL || process.env.VERCEL_REGION || process.env.NOW_REGION || process.env.AWS_LAMBDA_FUNCTION_NAME
+);
+const DB_PATH = process.env.DATABASE_PATH || (isServerless
   ? '/tmp/fitflow.db'
   : resolve(process.cwd(), 'data/fitflow.db'));
 mkdirSync(dirname(DB_PATH), { recursive: true });
